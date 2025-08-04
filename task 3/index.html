@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Web Development | Task 3</title>
+    <meta name="description" content="ApexPlanet Internship Task 3 - Advanced Styling and JavaScript">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <h1>Advanced Web Development</h1>
+            <p>Task 3: Responsive Design, Interactive Quiz & API Integration</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="card responsive-section">
+            <h2>Responsive Design</h2>
+            <p>This layout adapts to different screen sizes using CSS media queries.</p>
+            <div class="grid-container">
+                <div class="grid-item">Item 1</div>
+                <div class="grid-item">Item 2</div>
+                <div class="grid-item">Item 3</div>
+                <div class="grid-item">Item 4</div>
+                <div class="grid-item">Item 5</div>
+                <div class="grid-item">Item 6</div>
+            </div>
+        </section>
+
+        <section class="card quiz-section">
+            <h2>Interactive Quiz</h2>
+            <div id="quiz-container" class="quiz-container"></div>
+            <button id="submit-btn" class="btn">Submit Quiz</button>
+            <div id="quiz-result" class="result"></div>
+        </section>
+
+        <section class="card api-section">
+            <h2>API Data Fetching</h2>
+            <button id="fetch-btn" class="btn">Fetch Random Post</button>
+            <div id="api-data" class="api-data">
+                <p>Click the button to fetch data from JSONPlaceholder API</p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>© 2023 ApexPlanet Internship Program</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
