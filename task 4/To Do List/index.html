@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        
+        body {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1 {
+            text-align: center;
+        }
+        
+        .todo-form {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        
+        .todo-form input {
+            flex: 1;
+            padding: 10px;
+            font-size: 16px;
+        }
+        
+        .todo-form button {
+            padding: 10px 20px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .todo-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .todo-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .todo-item.completed {
+            opacity: 0.6;
+        }
+        
+        .todo-item.completed .todo-text {
+            text-decoration: line-through;
+        }
+        
+        .todo-text {
+            flex: 1;
+            margin: 0 10px;
+        }
+        
+        .todo-item button {
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        
+        @media (max-width: 600px) {
+            .todo-form {
+                flex-direction: column;
+            }
+            
+            .todo-form input {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>To-Do List</h1>
+    
+    <form class="todo-form">
+        <input type="text" id="todo-input" placeholder="Add a new task..." required>
+        <button type="submit">Add</button>
+    </form>
+    
+    <ul class="todo-list" id="todo-list"></ul>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const todoForm = document.querySelector('.todo-form');
+            const todoInput = document.getElementById('todo-input');
+            const todoList = document.getElementById('todo-list');
+            
+            // Load todos from localStorage
+            let todos = JSON.parse(localStorage.getItem('todos')) || [];
+            
+            // Render todos
+            function renderTodos() {
+                todoList.innerHTML = '';
+                todos.forEach((todo, index) => {
+                    const li = document.createElement('li');
+                    li.className = `todo-item ${todo.completed ? 'completed' : ''}`;
+                    li.innerHTML = `
+                        <input type="checkbox" ${todo.completed ? 'checked' : ''} data-index="${index}">
+                        <span class="todo-text">${todo.text}</span>
+                        <button data-index="${index}">Delete</button>
+                    `;
+                    todoList.appendChild(li);
+                });
+            }
+            
+            // Add new todo
+            todoForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const text = todoInput.value.trim();
+                if (text) {
+                    todos.push({ text, completed: false });
+                    localStorage.setItem('todos', JSON.stringify(todos));
+                    renderTodos();
+                    todoInput.value = '';
+                }
+            });
+            
+            // Toggle completed or delete todo
+            todoList.addEventListener('click', function(e) {
+                if (e.target.matches('input[type="checkbox"]')) {
+                    const index = e.target.dataset.index;
+                    todos[index].completed = !todos[index].completed;
+                    localStorage.setItem('todos', JSON.stringify(todos));
+                    renderTodos();
+                }
+                
+                if (e.target.matches('button')) {
+                    const index = e.target.dataset.index;
+                    todos.splice(index, 1);
+                    localStorage.setItem('todos', JSON.stringify(todos));
+                    renderTodos();
+                }
+            });
+            
+            // Initial render
+            renderTodos();
+        });
+    </script>
+</body>
+</html>

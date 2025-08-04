@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Listing</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        
+        body {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        select {
+            width: 100%;
+            padding: 8px;
+        }
+        
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .product-card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        
+        .product-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .product-title {
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .product-price {
+            color: #e63946;
+            font-weight: bold;
+        }
+        
+        .product-rating {
+            color: #f4a261;
+        }
+        
+        @media (max-width: 600px) {
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Our Products</h1>
+    
+    <div class="filters">
+        <div class="filter-group">
+            <label for="category">Category:</label>
+            <select id="category">
+                <option value="all">All Categories</option>
+                <option value="electronics">Electronics</option>
+                <option value="clothing">Clothing</option>
+                <option value="home">Home & Garden</option>
+            </select>
+        </div>
+        
+        <div class="filter-group">
+            <label for="sort">Sort By:</label>
+            <select id="sort">
+                <option value="default">Default</option>
+                <option value="price-asc">Price: Low to High</option>
+                <option value="price-desc">Price: High to Low</option>
+                <option value="rating">Rating</option>
+            </select>
+        </div>
+    </div>
+    
+    <div class="product-grid" id="product-grid"></div>
+    
+    <script>
+        // Sample product data
+        const products = [
+            { id: 1, name: 'Smartphone', category: 'electronics', price: 599.99, rating: 4.5, image: 'https://via.placeholder.com/300?text=Smartphone' },
+            { id: 2, name: 'Laptop', category: 'electronics', price: 999.99, rating: 4.8, image: 'https://via.placeholder.com/300?text=Laptop' },
+            { id: 3, name: 'T-Shirt', category: 'clothing', price: 19.99, rating: 4.2, image: 'https://via.placeholder.com/300?text=T-Shirt' },
+            { id: 4, name: 'Jeans', category: 'clothing', price: 49.99, rating: 4.3, image: 'https://via.placeholder.com/300?text=Jeans' },
+            { id: 5, name: 'Coffee Maker', category: 'home', price: 79.99, rating: 4.6, image: 'https://via.placeholder.com/300?text=Coffee+Maker' },
+            { id: 6, name: 'Blender', category: 'home', price: 39.99, rating: 4.1, image: 'https://via.placeholder.com/300?text=Blender' },
+            { id: 7, name: 'Headphones', category: 'electronics', price: 149.99, rating: 4.7, image: 'https://via.placeholder.com/300?text=Headphones' },
+            { id: 8, name: 'Garden Chair', category: 'home', price: 59.99, rating: 4.0, image: 'https://via.placeholder.com/300?text=Garden+Chair' }
+        ];
+        
+        const productGrid = document.getElementById('product-grid');
+        const categoryFilter = document.getElementById('category');
+        const sortFilter = document.getElementById('sort');
+        
+        // Render products
+        function renderProducts(productsToRender) {
+            productGrid.innerHTML = '';
+            productsToRender.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                productCard.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}">
+                    <div class="product-title">${product.name}</div>
+                    <div class="product-price">$${product.price.toFixed(2)}</div>
+                    <div class="product-rating">Rating: ${product.rating}/5</div>
+                `;
+                productGrid.appendChild(productCard);
+            });
+        }
+        
+        // Filter and sort products
+        function filterAndSortProducts() {
+            const category = categoryFilter.value;
+            const sort = sortFilter.value;
+            
+            let filteredProducts = [...products];
+            
+            // Filter by category
+            if (category !== 'all') {
+                filteredProducts = filteredProducts.filter(product => product.category === category);
+            }
+            
+            // Sort products
+            switch (sort) {
+                case 'price-asc':
+                    filteredProducts.sort((a, b) => a.price - b.price);
+                    break;
+                case 'price-desc':
+                    filteredProducts.sort((a, b) => b.price - a.price);
+                    break;
+                case 'rating':
+                    filteredProducts.sort((a, b) => b.rating - a.rating);
+                    break;
+                default:
+                    // Default sorting (by ID)
+                    filteredProducts.sort((a, b) => a.id - b.id);
+            }
+            
+            renderProducts(filteredProducts);
+        }
+        
+        // Event listeners for filters
+        categoryFilter.addEventListener('change', filterAndSortProducts);
+        sortFilter.addEventListener('change', filterAndSortProducts);
+        
+        // Initial render
+        filterAndSortProducts();
+    </script>
+</body>
+</html>
